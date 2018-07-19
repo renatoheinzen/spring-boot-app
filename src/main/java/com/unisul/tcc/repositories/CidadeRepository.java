@@ -7,7 +7,5 @@ import com.unisul.tcc.domain.Cidade;
 
 @Repository
 public interface CidadeRepository extends JpaRepository<Cidade, Integer>{
-	
-	
 
 }

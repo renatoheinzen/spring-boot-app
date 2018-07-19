@@ -8,6 +8,4 @@ import com.unisul.tcc.domain.Categoria;
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Integer>{
 	
-	
-
 }

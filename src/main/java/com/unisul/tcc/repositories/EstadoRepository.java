@@ -8,7 +8,5 @@ import com.unisul.tcc.domain.Estado;
 
 @Repository
 public interface EstadoRepository extends JpaRepository<Estado, Integer>{
-	
-	
 
 }
