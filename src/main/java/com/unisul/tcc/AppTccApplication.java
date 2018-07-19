@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.unisul.tcc.domain.Categoria;
 import com.unisul.tcc.domain.Cidade;
+import com.unisul.tcc.domain.Cliente;
+import com.unisul.tcc.domain.Endereco;
 import com.unisul.tcc.domain.Estado;
 import com.unisul.tcc.domain.Produto;
+import com.unisul.tcc.domain.enumns.TipoCliente;
 import com.unisul.tcc.repositories.CategoriaRepository;
 import com.unisul.tcc.repositories.CidadeRepository;
+import com.unisul.tcc.repositories.ClienteRepository;
+import com.unisul.tcc.repositories.EnderecoRepository;
 import com.unisul.tcc.repositories.EstadoRepository;
 import com.unisul.tcc.repositories.ProdutoRepository;
 
@@ -34,6 +39,12 @@ public class AppTccApplication implements CommandLineRunner {
 	
 	@Autowired
 	private EstadoRepository estadoRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -68,6 +79,15 @@ public class AppTccApplication implements CommandLineRunner {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
 		
+		Cliente cli1 = new Cliente(null, "Maria", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("27363323","93838393"));
 		
+		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "jardim", "38220834", cli1, c1);
+		Endereco e2 = new Endereco(null, "Avenia Matos", "105", "Sala 08", "centro", "38220834", cli1, c2);
+		
+		cli1.getEnderecos().addAll(Arrays.asList(e1,e2));
+		
+		clienteRepository.saveAll(Arrays.asList(cli1));
+		enderecoRepository.saveAll(Arrays.asList(e1,e2));
 	}
 }
