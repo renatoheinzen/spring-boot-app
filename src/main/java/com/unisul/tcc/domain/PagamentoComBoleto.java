@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.unisul.tcc.domain.enumns.TipoEstadoPagamento;
 
 @Entity
@@ -13,10 +14,10 @@ public class PagamentoComBoleto extends Pagamento {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Temporal(TemporalType.DATE)
+	@JsonFormat(pattern= "dd/MM/yyy")
 	private Date dataPagamento;
 	
-	@Temporal(TemporalType.DATE)
+	@JsonFormat(pattern= "dd/MM/yyy")
 	private Date dataVencimento;
 
 	public PagamentoComBoleto() {}
