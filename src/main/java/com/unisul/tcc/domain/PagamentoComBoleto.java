@@ -3,8 +3,6 @@ package com.unisul.tcc.domain;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.unisul.tcc.domain.enumns.TipoEstadoPagamento;
