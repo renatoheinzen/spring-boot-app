@@ -1,5 +1,6 @@
 package com.unisul.tcc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.unisul.tcc.domain.Cidade;
 import com.unisul.tcc.domain.Cliente;
 import com.unisul.tcc.domain.Endereco;
 import com.unisul.tcc.domain.Estado;
+import com.unisul.tcc.domain.Pagamento;
+import com.unisul.tcc.domain.PagamentoComBoleto;
+import com.unisul.tcc.domain.PagamentoComCartao;
+import com.unisul.tcc.domain.Pedido;
 import com.unisul.tcc.domain.Produto;
 import com.unisul.tcc.domain.enumns.TipoCliente;
+import com.unisul.tcc.domain.enumns.TipoEstadoPagamento;
 import com.unisul.tcc.repositories.CategoriaRepository;
 import com.unisul.tcc.repositories.CidadeRepository;
 import com.unisul.tcc.repositories.ClienteRepository;
 import com.unisul.tcc.repositories.EnderecoRepository;
 import com.unisul.tcc.repositories.EstadoRepository;
+import com.unisul.tcc.repositories.PagamentoRepository;
+import com.unisul.tcc.repositories.PedidoRepository;
 import com.unisul.tcc.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -45,6 +53,12 @@ public class AppTccApplication implements CommandLineRunner {
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -89,5 +103,21 @@ public class AppTccApplication implements CommandLineRunner {
 		
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(e1,e2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:37"), cli1, e2);
+		
+		Pagamento pagto1 = new PagamentoComCartao(null, TipoEstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		
+		Pagamento pagto2 = new PagamentoComBoleto(null, TipoEstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1,ped2));
+		
+		pedidoRepository.saveAll(Arrays.asList(ped1,ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 	}
 }
