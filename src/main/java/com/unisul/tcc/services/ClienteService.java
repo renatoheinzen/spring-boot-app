@@ -9,10 +9,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.unisul.tcc.domain.Cidade;
 import com.unisul.tcc.domain.Cliente;
+import com.unisul.tcc.domain.Endereco;
+import com.unisul.tcc.domain.enumns.TipoCliente;
 import com.unisul.tcc.dto.ClienteDTO;
+import com.unisul.tcc.dto.ClienteNewDTO;
 import com.unisul.tcc.repositories.ClienteRepository;
+import com.unisul.tcc.repositories.EnderecoRepository;
 import com.unisul.tcc.services.exceptions.DataIntegrityException;
 
 import javassist.tools.rmi.ObjectNotFoundException;
@@ -23,10 +29,21 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository repo;
 	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
 	public Cliente find(Integer id) throws ObjectNotFoundException {
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 								"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
+	}
+	
+	@Transactional
+	public Cliente insert(Cliente obj) {
+		obj.setId(null);
+		obj = repo.save(obj);
+		enderecoRepository.saveAll(obj.getEnderecos());
+		return obj;
 	}
 	
 	public Cliente update(Cliente obj) throws ObjectNotFoundException {
@@ -66,6 +83,23 @@ public class ClienteService {
 	
 	public Cliente fromDTO (ClienteDTO cliente) {
 		return new Cliente(cliente.getId(), cliente.getNome(), cliente.getEmail(), null, null);
+	}
+	
+	public Cliente fromDTO (ClienteNewDTO cliente) {
+		Cliente cli = new Cliente(null, cliente.getNome(), cliente.getEmail(), cliente.getCpfCnpj(), TipoCliente.toEnum(cliente.getTipo()));
+		Cidade cid = new Cidade(cliente.getCidadeId(), null, null);
+		Endereco end = new Endereco(null, cliente.getLogradouro(), cliente.getNumero(), cliente.getComplemento(), cliente.getBairro(), cliente.getCep(), cli, cid);
+		
+		cli.getEnderecos().add(end);
+		cli.getTelefones().add(cliente.getTelefone1());
+		if (cliente.getTelefone2()!=null) {
+			cli.getTelefones().add(cliente.getTelefone2());
+		}
+		if (cliente.getTelefone3()!=null) {
+			cli.getTelefones().add(cliente.getTelefone3());
+		}
+		return cli;
+		
 	}
 	
 }
