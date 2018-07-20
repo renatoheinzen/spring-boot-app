@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.unisul.tcc.domain.Categoria;
+import com.unisul.tcc.dto.CategoriaDTO;
 import com.unisul.tcc.repositories.CategoriaRepository;
 import com.unisul.tcc.services.exceptions.DataIntegrityException;
 
@@ -57,9 +58,13 @@ public class CategoriaService {
 	
 	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
 		
-		PageRequest pageRequest = new PageRequest(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
 		
+	}
+	
+	public Categoria fromDTO (CategoriaDTO categoria) {
+		return new Categoria(categoria.getId(), categoria.getNome());
 	}
 	
 }
