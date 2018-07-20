@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.unisul.tcc.domain.Categoria;
+import com.unisul.tcc.domain.Categoria;
 import com.unisul.tcc.dto.CategoriaDTO;
 import com.unisul.tcc.repositories.CategoriaRepository;
 import com.unisul.tcc.services.exceptions.DataIntegrityException;
@@ -35,8 +36,15 @@ public class CategoriaService {
 	}
 
 	public Categoria update(Categoria obj) throws ObjectNotFoundException {
-		find(obj.getId());
-		return repo.save(obj);
+		Categoria newCategoria = find(obj.getId());
+		updateData(newCategoria, obj);
+		return repo.save(newCategoria);
+	}
+	
+	private void updateData (Categoria newCategoria, Categoria categoria) {
+		
+		newCategoria.setNome(categoria.getNome());
+		
 	}
 
 	public void delete(Integer id) throws ObjectNotFoundException {
