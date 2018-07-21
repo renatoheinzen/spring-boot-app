@@ -2,9 +2,11 @@ package com.unisul.tcc.domain;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.unisul.tcc.domain.enumns.TipoEstadoPagamento;
 
 @Entity
+@JsonTypeName("pagamentoComCartao")
 public class PagamentoComCartao extends Pagamento {
 	
 	private static final long serialVersionUID = 1L;
