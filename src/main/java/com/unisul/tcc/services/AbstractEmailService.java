@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 
 import com.unisul.tcc.domain.Pedido;
-
+ 
 public abstract class AbstractEmailService implements EmailService {
 	
 	@Value("${default.sender}")
