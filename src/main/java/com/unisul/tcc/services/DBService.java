@@ -19,6 +19,7 @@ import com.unisul.tcc.domain.PagamentoComBoleto;
 import com.unisul.tcc.domain.PagamentoComCartao;
 import com.unisul.tcc.domain.Pedido;
 import com.unisul.tcc.domain.Produto;
+import com.unisul.tcc.domain.enumns.Perfil;
 import com.unisul.tcc.domain.enumns.TipoCliente;
 import com.unisul.tcc.domain.enumns.TipoEstadoPagamento;
 import com.unisul.tcc.repositories.CategoriaRepository;
@@ -129,15 +130,20 @@ public class DBService {
 		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
 		
 		Cliente cli1 = new Cliente(null, "Renato Heinzen", "heinzen.renato@gmail.com", "36378912377", TipoCliente.PESSOAFISICA,passwordEncoder.encode("123456"));
+		Cliente cli2 = new Cliente(null, "Ana costa", "renato.heinzen@outlook.com", "70714202037", TipoCliente.PESSOAFISICA,passwordEncoder.encode("123456"));
+		cli2.addPerfil(Perfil.ADMIN);
 		cli1.getTelefones().addAll(Arrays.asList("27363323","93838393"));
+		cli2.getTelefones().addAll(Arrays.asList("27863323","93838393"));
 		
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "jardim", "38220834", cli1, c1);
 		Endereco e2 = new Endereco(null, "Avenia Matos", "105", "Sala 08", "centro", "38220834", cli1, c2);
+		Endereco e3 = new Endereco(null, "Avenida Floriano", "102", "Sala 5", "centro", "38220834", cli2, c2);
 		
 		cli1.getEnderecos().addAll(Arrays.asList(e1,e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
 		
-		clienteRepository.saveAll(Arrays.asList(cli1));
-		enderecoRepository.saveAll(Arrays.asList(e1,e2));
+		clienteRepository.saveAll(Arrays.asList(cli1,cli2));
+		enderecoRepository.saveAll(Arrays.asList(e1,e2,e3));
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
