@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,9 @@ import javassist.tools.rmi.ObjectNotFoundException;
 
 @Service
 public class ClienteService {
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private ClienteRepository repo;
@@ -64,7 +68,7 @@ public class ClienteService {
 			repo.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
 
-			throw new DataIntegrityException("Não é possível excluir porque há pedidos relacionadas");
+			throw new DataIntegrityException("Não é possível excluir porque há pedidos relacionados");
 			
 		}
 		
@@ -82,11 +86,11 @@ public class ClienteService {
 	}
 	
 	public Cliente fromDTO (ClienteDTO cliente) {
-		return new Cliente(cliente.getId(), cliente.getNome(), cliente.getEmail(), null, null);
+		return new Cliente(cliente.getId(), cliente.getNome(), cliente.getEmail(), null, null, null);
 	}
 	
 	public Cliente fromDTO (ClienteNewDTO cliente) {
-		Cliente cli = new Cliente(null, cliente.getNome(), cliente.getEmail(), cliente.getCpfCnpj(), TipoCliente.toEnum(cliente.getTipo()));
+		Cliente cli = new Cliente(null, cliente.getNome(), cliente.getEmail(), cliente.getCpfCnpj(), TipoCliente.toEnum(cliente.getTipo()), passwordEncoder.encode(cliente.getSenha()));
 		Cidade cid = new Cidade(cliente.getCidadeId(), null, null);
 		Endereco end = new Endereco(null, cliente.getLogradouro(), cliente.getNumero(), cliente.getComplemento(), cliente.getBairro(), cliente.getCep(), cli, cid);
 		
