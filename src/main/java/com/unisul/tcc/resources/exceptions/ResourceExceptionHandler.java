@@ -9,8 +9,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.unisul.tcc.services.exceptions.AuthorizationException;
 import com.unisul.tcc.services.exceptions.DataIntegrityException;
+import com.unisul.tcc.services.exceptions.FileException;
 import com.unisul.tcc.services.exceptions.ObjectNotFoundException;
 
 @ControllerAdvice
@@ -43,6 +47,31 @@ public class ResourceExceptionHandler {
 	public ResponseEntity<StandError> authorization(AuthorizationException e, HttpServletRequest request) {
 		StandError err = new StandError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
+	}
+	
+	@ExceptionHandler(FileException.class)
+	public ResponseEntity<StandError> file(FileException e, HttpServletRequest request) {
+		StandError err = new StandError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+	}
+	
+	@ExceptionHandler(AmazonServiceException.class)
+	public ResponseEntity<StandError> amazonService(AmazonServiceException e, HttpServletRequest request) {
+		HttpStatus codeError =  HttpStatus.valueOf(e.getErrorCode());
+		StandError err = new StandError(codeError.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(codeError).body(err);
+	}
+	
+	@ExceptionHandler(AmazonClientException.class)
+	public ResponseEntity<StandError> amazonCliente(AmazonClientException e, HttpServletRequest request) {
+		StandError err = new StandError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+	}
+	
+	@ExceptionHandler(AmazonS3Exception.class)
+	public ResponseEntity<StandError> amazonS3Cliente(AmazonS3Exception e, HttpServletRequest request) {
+		StandError err = new StandError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
 	
 }
