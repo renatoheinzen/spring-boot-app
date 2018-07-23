@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.unisul.tcc.domain.Cidade;
 import com.unisul.tcc.domain.Cliente;
 import com.unisul.tcc.domain.Endereco;
+import com.unisul.tcc.domain.enumns.Perfil;
 import com.unisul.tcc.domain.enumns.TipoCliente;
 import com.unisul.tcc.dto.ClienteDTO;
 import com.unisul.tcc.dto.ClienteNewDTO;
 import com.unisul.tcc.repositories.ClienteRepository;
 import com.unisul.tcc.repositories.EnderecoRepository;
+import com.unisul.tcc.security.UserSS;
+import com.unisul.tcc.services.exceptions.AuthorizationException;
 import com.unisul.tcc.services.exceptions.DataIntegrityException;
 
 import javassist.tools.rmi.ObjectNotFoundException;
@@ -37,6 +40,11 @@ public class ClienteService {
 	private EnderecoRepository enderecoRepository;
 	
 	public Cliente find(Integer id) throws ObjectNotFoundException {
+		UserSS user = UserService.authenticated();
+		if(user == null || !user.hasRole(Perfil.ADMIN) && id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 								"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
