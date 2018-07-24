@@ -1,4 +1,4 @@
-package com.unisul.tcc;
+package com.unisul;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
