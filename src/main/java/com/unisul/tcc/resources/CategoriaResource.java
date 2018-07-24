@@ -44,7 +44,7 @@ public class CategoriaResource {
 
 		List<Categoria> categorias = service.findAll();
 		List<CategoriaDTO> categoriasDTO = categorias.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
-		return ResponseEntity.ok(categoriasDTO);
+		return ResponseEntity.ok().body(categoriasDTO);
 
 	}
 	
