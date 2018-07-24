@@ -3,7 +3,7 @@ package com.unisul.tcc.resources.exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ValidationError extends StandError {
+public class ValidationError extends StandardError {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -17,11 +17,11 @@ public class ValidationError extends StandError {
 		errors.add(new FieldMessage(nome, message));
 	}
 
-	public ValidationError(Integer error, String mensagem, Long timeStamp) {
-		super(error, mensagem, timeStamp);
-		
-		
+	public ValidationError(Long timeStamp, Integer status, String error, String message, String path) {
+		super(timeStamp, status, error, message, path);
 	}
+
+
 
 	
   
