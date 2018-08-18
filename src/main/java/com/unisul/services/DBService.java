@@ -210,15 +210,15 @@ public class DBService {
 		Cidade c3 = new Cidade(null, "Campinas", est2);
 
 		est1.getCidades().addAll(Arrays.asList(c1));
-		est2.getCidades().addAll(Arrays.asList(c2, c3));
+		est2.getCidades().addAll(Arrays.asList(c2, c3)); 
 
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 
-		Cliente cli1 = new Cliente(null, "Renato Heinzen", "heinzen.renato@gmail.com", "36378912377",
-				TipoCliente.PESSOAFISICA, passwordEncoder.encode("123456"));
-		Cliente cli2 = new Cliente(null, "Ana costa", "renato.heinzen@outlook.com", "70714202037",
-				TipoCliente.PESSOAFISICA, passwordEncoder.encode("123456"));
+		Cliente cli1 = new Cliente(null, "Renato Heinzen", "heinzen.renato@gmail.com", "05501948940",
+				                   TipoCliente.PESSOAFISICA, passwordEncoder.encode("123456"));
+		Cliente cli2 = new Cliente(null, "Ana costa", "renato.heinzen@outlook.com", "38369515924",
+				                   TipoCliente.PESSOAFISICA, passwordEncoder.encode("123456"));
 		cli2.addPerfil(Perfil.ADMIN);
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
 		cli2.getTelefones().addAll(Arrays.asList("27863323", "93838393"));

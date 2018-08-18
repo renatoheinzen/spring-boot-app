@@ -2,8 +2,13 @@ package com.unisul.security;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.yaml.snakeyaml.extensions.compactnotation.CompactConstructor;
+
+import com.unisul.services.MockEmailService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,7 +23,10 @@ public class JWTUtil {
 	@Value("${jwt.expiration}")
 	private Long expiration;
 	
+	private static final Logger LOG = LoggerFactory.getLogger(JWTUtil.class);
+	
 	public String generateToken(String username) {
+		LOG.info("Gerando token para o usuário: "+username);
 		return Jwts.builder()
 				.setSubject(username)
 				.setExpiration(new Date(System.currentTimeMillis() + expiration))

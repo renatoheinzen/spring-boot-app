@@ -2,6 +2,8 @@ package com.unisul.config;
 
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private JWTUtil jwtUtil;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(SecurityConfig.class);
 	
 	private static final String[] PUBLIC_MATCHERS = {
 			"/h2-console/**"
@@ -73,6 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		LOG.info("AuthenticationManagerBuilder");
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
 	
